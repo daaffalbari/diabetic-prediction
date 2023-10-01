@@ -136,18 +136,15 @@ Kemudian dilakukan proses *Exploratory Data Analysis* (EDA) sebagai investigasi 
 
    <img src="https://github.com/daaffalbari/diabetic-prediction/assets/73302268/1f0550a1-96e5-4db1-8402-47e57742831e" alt="Menangani Outliers - Sebelum" title="Menangani Outliers - Sebelum">
      
-   Berdasarkan gambar tersebut, terdapat *outliers* pada fitur `Temperature`, `Humidity`, `PowerConsumption_Zone2`, dan `PowerConsumption_Zone3`. Sehingga dilakukan proses pembersihan *outliers* dengan metode IQR (*Inter Quartile Range*).
+   Berdasarkan gambar tersebut, terdapat *outliers* pada fitur `HbA1c`, `blood_glucose_level`, dan `bmi`. Sehingga dilakukan proses pembersihan *outliers* dengan metode Z-Score.
    
-   $$IQR=Q_3-Q_1$$
+   $$Z_score=(X_mean) / std.devation
+
+   ![image](https://github.com/daaffalbari/diabetic-prediction/assets/73302268/43aead66-8488-4654-8013-2e78d2a84615)
+
+   Untuk penjelasannya bisa dilihat pada gambar di atas.
    
-   Kemudian membuat batas bawah dan batas atas untuk mencakup *outliers* dengan menggunakan,
-   
-   $BatasBawah=Q_1-1.5*IQR$
-   
-   $BatasAtas=Q_3-1.5*IQR$
-   
-   
-5. **Univariate Analysis**  
+6. **Univariate Analysis**  
    Melakukan proses analisis data *univariate* pada fitur-fitur numerik. Proses analisis ini menggunakan bantuan visualisasi histogram untuk masing-masing fitur numerik.
 
    <img src="https://github.com/daaffalbari/diabetic-prediction/assets/73302268/6a17eee6-41fb-4e69-869a-260a0df13536" alt="Univariate Analysis" title="Univariate Analysis">
@@ -172,7 +169,7 @@ Kemudian dilakukan proses *Exploratory Data Analysis* (EDA) sebagai investigasi 
 Pada tahap persiapan data atau *data preparation* dilakukan berdasarkan penjelasan yang sudah dipaparkan pada bagian [Solution Statements](#solution-statements "Solution Statements"). Tahap ini penting dilakukan untuk mempersiapkan data sehingga dapat digunakan untuk melatih model *machine learning* dengan baik. Berikut adalah dua tahapan data preparation yang dilakukan, yaitu,
 
 1. **Split Data**  
-   Pembagian data dilakukan untuk memisahkan data keseluruhan menjadi dua (2) bagian, yaitu data latih (*training data*) dan data uji (*testing data*) dengan perbandingan rasio sebesar 90 : 10 menggunakan `train_test_split`.
+   Pembagian data dilakukan untuk memisahkan data keseluruhan menjadi dua (2) bagian, yaitu data latih (*training data*) dan data uji (*testing data*) dengan perbandingan rasio sebesar 90 : 10 menggunakan `train_test_split`. Alasan membagi kedalam jumlah 90:10 dikarenakan jumlah dataset yang digunakan jumlahnya sudah banyak. Sehingga membagi ke dalam 90 : 10 tidak menjadi masalah. 
    
     ```python
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.1, random_state = 123)
@@ -283,7 +280,7 @@ Dari visualisasi diagram di atas dapat disimpulkan bahwa,
 3. Model dengan algoritma Decision Tree mengalami *error* yang paling beser dengan nilai *training error* sebesar 7602.37, dan nilai *testing error* sebesar 7436.21.
 
 
-Kesimpulannya adalah model yang digunakan untuk melakukan prediksi penggunaan daya listrik (*electric power consumption*) menghasilkan **tingkat *error* yang paling rendah** dengan menggunakan **algoritma Random Forest** pada model yang telah dibangun.
+Kesimpulannya adalah model yang digunakan untuk melakukan prediksi diabetes berdasarkan riwayat pasien menghasilkan **tingkat *error* yang paling rendah** dengan menggunakan **algoritma Random Forest** pada model yang telah dibangun.
 
 ---
 

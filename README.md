@@ -108,7 +108,11 @@ Kemudian dilakukan proses *Exploratory Data Analysis* (EDA) sebagai investigasi 
 1. **Deskripsi Variabel**  
    Berikut adalah informasi mengenai variabel-variabel yang terdapat pada *dataset* *Electric Power Consumption* adalah sebagai berikut,
    
-   <img src="https://github.com/daaffalbari/diabetic-prediction/assets/73302268/db93b849-4717-4e10-933f-eb936efecdc5" alt="Deskripsi Variabel" title="Deskripsi Variabel">
+| gender | age  | hypertension | heart_disease | smoking_history | bmi   | HbA1c_level | blood_glucose_level | diabetes |
+|--------|------|--------------|---------------|-----------------|-------|-------------|---------------------|----------|
+| female | 80.0 | 0            | 1             | never           | 25.19 | 6.6         | 140                 | 0        |
+| female | 54.0 | 0            | 0             | No Info         | 27.32 | 6.6         | 80                  | 0        |
+| male   | 28.0 | 1            | 1             | never           | 27.32 | 5.7         | 158                 | 0        |
    
    Dari gambar di atas dapat dilihat bahwa terdapat 52.416 baris data dan 10 kolom atribut atau fitur. Di antaranya adalah enam (6) atribut/variabel dengan tipe data `float64 non-null` dan lima (5) atribut/variabel dengan tipe data `int64 non-null` yang merupakan hasil penguraian dari variabel `Datetime` yang sebelumnya memiliki tipe data `datetime64[ns]`. Berikut adalah keterangan untuk masing-masing variabel,
    - `Gender` : mengacu pada jenis kelamin biologis individu, yang dapat memengaruhi kerentanan mereka terhadap diabetes.
@@ -121,17 +125,38 @@ Kemudian dilakukan proses *Exploratory Data Analysis* (EDA) sebagai investigasi 
    - `blood_glucose_leve`  : Blood glucose level refers to the amount of glucose in the bloodstream at a given time. High blood glucose levels are a key indicator of diabetes.
    - `diabetes`    : Diabetes is the target variable being predicted, with values of 1 indicating the presence of diabetes and 0 indicating the absence of diabetes.
    
-2. **Deskripsi Statistik**  
+2. **Deskripsi Statistik**
 
-   <img src="https://github.com/daaffalbari/diabetic-prediction/assets/73302268/5a2a2b38-bcd9-4239-ad3a-02123cb5f947" alt="Deskripsi Statistik" title="Deskripsi Statistik">
+   Untuk mendapatkan deskripsi dari data yang digunakan, kita menggunakan fungsi `describe()` yang sudah disediakan python. Hasil dari fungsi tersebut bisa dilihat pada tabel di bawah ini:
+
+   |       | age           | hypertension | heart_disease | bmi           | HbA1c_level   | blood_glucose_level | diabetes      |
+   |-------|---------------|--------------|---------------|---------------|---------------|---------------------|---------------|
+   | count | 100000.000000 | 100000.00000 | 100000.000000 | 100000.000000 | 100000.000000 | 100000.000000       | 100000.000000 |
+   | mean  | 41.885856     | 0.07485      | 0.039420      | 27.320767     | 5.527507      | 138.058060          | 0.085000      |
+   | std   | 22.516840     | 0.26315      | 0.194593      | 6.636783      | 1.070672      | 40.708136           | 0.278883      |
+   | min   | 0.080000      | 0.00000      | 0.000000      | 10.010000     | 3.500000      | 80.000000           | 0.000000      |
+   | 25%   | 24.000000     | 0.00000      | 0.000000      | 23.630000     | 4.800000      | 100.000000          | 0.000000      |
+   | 50%   | 43.000000     | 0.00000      | 0.000000      | 27.320000     | 5.800000      | 140.000000          | 0.000000      |
+   | 75%   | 60.000000     | 0.00000      | 0.000000      | 29.580000     | 6.200000      | 159.000000          | 0.000000      |
+   | max   | 80.000000     | 1.00000      | 1.000000      | 95.690000     | 9.000000      | 300.000000          | 1.000000      |
+
+
+   - Count (Jumlah Data): Ini adalah jumlah entri non-null dalam kolom. Ini menggambarkan seberapa banyak data yang tersedia untuk kolom tersebut.
+   - Mean (Rata-rata): Ini adalah nilai rata-rata dari seluruh data dalam kolom. Rata-rata adalah jumlah semua nilai dibagi dengan jumlah entri.
+   - Std (Deviasi Standar): Ini adalah ukuran sebaran data. Ini mengukur seberapa jauh setiap nilai dari rata-rata. Standar deviasi yang lebih tinggi menunjukkan bahwa data lebih tersebar.
+   - Min (Nilai Minimum): Ini adalah nilai terkecil dalam kolom, menunjukkan batas bawah data.
+   - 25% (Kuartil Pertama): Ini adalah nilai yang membagi 25% data terendah dari 75% data tertinggi. Kuartil pertama juga dikenal sebagai kuartil bawah atau kuartil ke-1.
+   - 50% (Median atau Kuartil Kedua): Ini adalah nilai yang membagi data menjadi dua setengah. Setengah data berada di atas nilai ini dan setengahnya lagi berada di bawahnya. Median juga dikenal sebagai kuartil tengah atau kuartil ke-2.
+   - 75% (Kuartil Ketiga): Ini adalah nilai yang membagi 75% data terendah dari 25% data tertinggi. Kuartil ketiga juga dikenal sebagai kuartil atas atau kuartil ke-3.
+   - Max (Nilai Maksimum): Ini adalah nilai terbesar dalam kolom, menunjukkan batas atas data.
    
-3. **Menangani Missing Value**  
+4. **Menangani Missing Value**  
 
    <img src="https://github.com/daaffalbari/diabetic-prediction/assets/73302268/a4f99c90-d167-4a1c-addc-30742d8c80ea" alt="Menangani Missing Value" title="Menangani Missing Value">
    
    Berdasarkan gambar tersebut, tidak terdapat *missing value*.
    
-4. **Menangani Outliers**  
+5. **Menangani Outliers**  
    *Outliers* merupakan sampel data yang nilainya berada sangat jauh dari cakupan umum data utama yang dapat merusak hasil analisis data. Berikut adalah visualisasi *boxplot* untuk melakukan pengecekan keberadaan *outliers*.
 
    <img src="https://github.com/daaffalbari/diabetic-prediction/assets/73302268/1f0550a1-96e5-4db1-8402-47e57742831e" alt="Menangani Outliers - Sebelum" title="Menangani Outliers - Sebelum">
@@ -191,14 +216,30 @@ Pada tahap persiapan data atau *data preparation* dilakukan berdasarkan penjelas
     scaler.fit(X_train[numericalFeatures])
     X_train[numericalFeatures]  = scaler.transform(X_train.loc[:, numericalFeatures])
     ```
-    
-   <img src="https://github.com/daaffalbari/diabetic-prediction/assets/73302268/834ed67b-d82a-463a-8ba8-f7560f29a11d" alt="Standarisasi pada Fitur Numerik" title="Standarisasi pada Fitur Numerik">
+
+|   | gender    | age       | hypertension | heart_disease | smoking_history | bmi       | HbA1c_level | blood_glucose_level |
+|---|-----------|-----------|--------------|---------------|-----------------|-----------|-------------|---------------------|
+| 0 | -1.185701 | -0.054301 | -0.278626    | -0.198654     | 1.920119        | 0.072790  | -0.970700   | 0.645537            |
+| 1 | -1.185701 | 1.233948  | -0.278626    | -0.198654     | 1.920119        | 0.679367  | 1.130653    | -1.247323           |
+| 2 | -1.185701 | 1.189525  | -0.278626    | -0.198654     | -0.913236       | 0.919368  | 0.230074    | -0.972995           |
+| 3 | -1.185701 | 1.233948  | -0.278626    | -0.198654     | -0.204898       | -0.482828 | 0.730396    | 0.124314            |
+| 4 | -1.185701 | 0.212234  | -0.278626    | -0.198654     | -0.204898       | -0.038991 | 0.530267    | 0.124314            |
 
     ```python
     X_train[numericalFeatures].describe().round(4)
     ```
 
-   <img src="https://github.com/daaffalbari/diabetic-prediction/assets/73302268/fb8f54f6-6020-4e68-a190-f778d0d7858c" alt="Deskripsi Statistik setelah Standarisasi" title="Deskripsi Statistik setelah Standarisasi">
+|       | gender     | age        | hypertension | heart_disease | smoking_history | bmi        | HbA1c_level | blood_glucose_level |
+|-------|------------|------------|--------------|---------------|-----------------|------------|-------------|---------------------|
+| count | 83287.0000 | 83287.0000 | 83287.0000   | 83287.0000    | 83287.0000      | 83287.0000 | 83287.0000  | 83287.0000          |
+| mean  | -0.0000    | -0.0000    | 0.0000       | 0.0000        | -0.0000         | 0.0000     | 0.0000      | 0.0000              |
+| std   | 1.0000     | 1.0000     | 1.0000       | 1.0000        | 1.0000          | 1.0000     | 1.0000      | 1.0000              |
+| min   | -1.1857    | -1.8276    | -0.2786      | -0.1987       | -0.9132         | -2.7727    | -1.9713     | -1.5217             |
+| 25%   | -1.1857    | -0.8095    | -0.2786      | -0.1987       | -0.9132         | -0.6078    | -0.6705     | -0.9730             |
+| 50%   | 0.8434     | 0.0345     | -0.2786      | -0.1987       | -0.2049         | 0.0728     | 0.3301      | 0.1243              |
+| 75%   | 0.8434     | 0.7897     | -0.2786      | -0.1987       | 0.5034          | 0.4147     | 0.7304      | 0.6181              |
+| max   | 0.8434     | 1.7226     | 3.5890       | 5.0339        | 2.6285          | 3.4098     | 2.7317      | 3.4162              |
+
 
 ## Modelling
 
@@ -268,19 +309,40 @@ for name, model in modelDict.items():
     mse.loc[name, 'test']  = mean_squared_error(y_true=yTest,  y_pred=model.predict(xTest))/1e3
 ```
 
-<img src="https://github.com/daaffalbari/diabetic-prediction/assets/73302268/ebc1a4ae-57cd-4aa9-a63c-4c20f46507b3" alt="Evaluation" title="Evaluation">
+|           | DecisionTree | KNN      | Random Forest |
+|-----------|--------------|----------|---------------|
+| Accuracy  | 0.967801     | 0.958509 | 0.967585      |
+| Precision | 0.974393     | 0.950201 | 0.974227      |
+| Recall    | 0.760309     | 0.696673 | 0.758669      |
+| F1-score  | 0.831994     | 0.767409 | 0.830522      |
+| mse       | 0.032199     | 0.041491 | 0.032415      |
+
+Dan untuk hasil mse dari data train dan test adalah sebagai berikut:
+|              | train    | test     |
+|--------------|----------|----------|
+| KNN          | 0.000036 | 0.000041 |
+| RandomForest | 0.000022 | 0.000032 |
+| DecisionTree | 0.000028 | 0.000032 |
 
 Dari data tabel tersebut dapat divisualisasikan pada grafik batang berikut.
 
 <img src="https://github.com/daaffalbari/diabetic-prediction/assets/73302268/7d36cd68-689e-43ef-af66-ad7dd7275dfb" alt="Evaluation Graph" title="Evaluation Graph">
 
 Dari visualisasi diagram di atas dapat disimpulkan bahwa,
-1. Model dengan algoritma Random Forest memberikan nilai *error* yang paling kecil, yaitu sebesar 583.1 pada *training error*, dan 1542.6 pada *testing error*.
-2. Model dengan algoritma K-Nearest Neighbor memiliki tingkat *error* yang sedang di antara dua algoritma lainnya.
-3. Model dengan algoritma Decision Tree mengalami *error* yang paling beser dengan nilai *training error* sebesar 7602.37, dan nilai *testing error* sebesar 7436.21.
+1. Model RandomForest dengan Tingkat Error Terendah:
+Model yang menggunakan algoritma RandomForest memberikan tingkat kesalahan yang paling rendah di antara ketiga model.
+Pada data pelatihan (train error), kesalahan model RandomForest adalah 0.000022, sedangkan pada data pengujian (test error), kesalahan adalah 0.000032.
+
+2. Model K-Nearest Neighbor (KNN) dengan Tingkat Error Menengah:
+Model yang menggunakan algoritma K-Nearest Neighbor (KNN) memiliki tingkat kesalahan yang berada di tengah-tengah antara model RandomForest dan DecisionTree.
+Tingkat kesalahan KNN adalah 0.000036 pada data pelatihan dan 0.000041 pada data pengujian.
+Model DecisionTree dengan Tingkat Error Tertinggi:
+
+3. Model yang menggunakan algoritma DecisionTree memiliki tingkat kesalahan yang paling tinggi di antara ketiga model.
+Tingkat kesalahan DecisionTree adalah 0.000028 pada data pelatihan dan 0.000032 pada data pengujian.
 
 
-Kesimpulannya adalah model yang digunakan untuk melakukan prediksi diabetes berdasarkan riwayat pasien menghasilkan **tingkat *error* yang paling rendah** dengan menggunakan **algoritma Random Forest** pada model yang telah dibangun.
+Kesimpulannya, dari ketiga model yang telah diuji, model RandomForest memberikan tingkat kesalahan yang paling rendah pada kedua set data pelatihan dan pengujian. Oleh karena itu, dalam konteks ini, model RandomForest dianggap sebagai model yang paling baik dalam memprediksi data berdasarkan tingkat kesalahan yang lebih rendah.
 
 ---
 

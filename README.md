@@ -92,16 +92,6 @@ Berdasarkan penjelasan di atas, terdapat beberapa solusi yang dapat dilakukan un
 
 Data yang digunakan dalam proyek ini adalah *dataset* yang diambil dari Kaggle Dataset [Diabetes Prediction](https://www.kaggle.com/datasets/iammustafatz/diabetes-prediction-dataset') dengan kategori *dataset*, yaitu *Health* dan *Classification*. Dalam *dataset* tersebut terdapat sebuah *file* atau berkas dengan nama `diabetes_prediction_dataset.csv` yang berekstensi (*file format*) `.csv` atau [comma-separated values](https://en.wikipedia.org/wiki/Comma-separated_values 'Comma-separated values') berukuran 751 KB.
 
-Dari *dataset* tersebut, masih perlu dilakukan penyesuaian hingga *dataset* dapat benar-benar digunakan. Beberapa penyesuaian tersebut, yaitu
-- Menghapus kolom yang tidak digunakan dalam model, yaitu kolom `GeneralDiffuseFlows`, dan kolom `DiffuseFlows`.
-  ```python
-   data['smoking_history'].replace({'never': 2, 'No Info': 3, 'current': 4, 'former': 5,
-                                'not current': 6, 'ever': 7}, inplace=True)
-   ```
-- Mengubah format atau tipe data pada kolom `Datetime` dari format `string` menjadi `datetime`.
-  ```python
-  data['gender'].replace({'Male': 2, 'Female': 3, 'Other': 3}, inplace=True)
-  ```
 
 Kemudian dilakukan proses *Exploratory Data Analysis* (EDA) sebagai investigasi awal untuk menganalisis karakteristik, menemukan pola, anomali, dan memeriksa asumsi pada data dengan menggunakan teknik statistik dan representasi grafis atau visualisasi.
 
@@ -194,28 +184,18 @@ Kemudian dilakukan proses *Exploratory Data Analysis* (EDA) sebagai investigasi 
 Pada tahap persiapan data atau *data preparation* dilakukan berdasarkan penjelasan yang sudah dipaparkan pada bagian [Solution Statements](#solution-statements "Solution Statements"). Tahap ini penting dilakukan untuk mempersiapkan data sehingga dapat digunakan untuk melatih model *machine learning* dengan baik. Berikut adalah dua tahapan data preparation yang dilakukan, yaitu,
 
 1. **Split Data**  
-   Pembagian data dilakukan untuk memisahkan data keseluruhan menjadi dua (2) bagian, yaitu data latih (*training data*) dan data uji (*testing data*) dengan perbandingan rasio sebesar 90 : 10 menggunakan `train_test_split`. Alasan membagi kedalam jumlah 90:10 dikarenakan jumlah dataset yang digunakan jumlahnya sudah banyak. Sehingga membagi ke dalam 90 : 10 tidak menjadi masalah. 
-   
-    ```python
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.1, random_state = 123)
-    ```
+   Pembagian data dilakukan untuk memisahkan data keseluruhan menjadi dua (2) bagian, yaitu data latih (*training data*) dan data uji (*testing data*) dengan perbandingan rasio sebesar 90 : 10 menggunakan `train_test_split`. Alasan membagi kedalam jumlah 90:10 dikarenakan jumlah dataset yang digunakan jumlahnya sudah banyak. Sehingga membagi ke dalam 90 : 10 tidak menjadi masalah.
+
     
    Kemudian diperoleh hasil pembagian data masing-masing, yaitu sebagai berikut,
-   
-    ```python
-    Total # of sample in whole dataset: 92542
-    Total # of sample in train dataset: 83287
-    Total # of sample in test dataset: 9255
-    ```
 
-2. **Standarisasi pada Fitur Numerik**  
+    - Total of sample in whole dataset: 92542
+    - Total of sample in train dataset: 83287
+    - Total of sample in test dataset: 9255
+
+1. **Standarisasi pada Fitur Numerik**  
    Standarisasi fitur numerik menggunakan `StandardScaler` untuk mencegah terjadinya penyimpangan nilai data yang cukup besar. Proses standarisasi tersebut dilakukan dengan mengurangkan nilai rata-rata, lalu membaginya dengan standar deviasi atau simpangan baku untuk menggeser distribusi. Proses standarisasi akan menghasilkan distribusi dengan nilai rata-rata menjadi 0, dan nilai standar deviasi menjadi 1.
-   
-    ```python
-    scaler = StandardScaler()
-    scaler.fit(X_train[numericalFeatures])
-    X_train[numericalFeatures]  = scaler.transform(X_train.loc[:, numericalFeatures])
-    ```
+
 
 |   | gender    | age       | hypertension | heart_disease | smoking_history | bmi       | HbA1c_level | blood_glucose_level |
 |---|-----------|-----------|--------------|---------------|-----------------|-----------|-------------|---------------------|
@@ -225,9 +205,7 @@ Pada tahap persiapan data atau *data preparation* dilakukan berdasarkan penjelas
 | 3 | -1.185701 | 1.233948  | -0.278626    | -0.198654     | -0.204898       | -0.482828 | 0.730396    | 0.124314            |
 | 4 | -1.185701 | 0.212234  | -0.278626    | -0.198654     | -0.204898       | -0.038991 | 0.530267    | 0.124314            |
 
-    ```python
-    X_train[numericalFeatures].describe().round(4)
-    ```
+  Salah satu ciri-ciri dari data yang disudah distandarisasi adalah rata-rata di setiap kolom atau fitur akan mendekati nol. Untuk melihat hal tersebut, digunakan fungsi `describe` yang sudah disediakan oleh python, sehingga hasil yang didapat adalah sebagai berikut,
 
 |       | gender     | age        | hypertension | heart_disease | smoking_history | bmi        | HbA1c_level | blood_glucose_level |
 |-------|------------|------------|--------------|---------------|-----------------|------------|-------------|---------------------|
@@ -241,57 +219,35 @@ Pada tahap persiapan data atau *data preparation* dilakukan berdasarkan penjelas
 | max   | 0.8434     | 1.7226     | 3.5890       | 5.0339        | 2.6285          | 3.4098     | 2.7317      | 3.4162              |
 
 
-## Modelling
+## Model Development
 
 Setelah dilakukannya tahap *data preparation*, selanjutnya adalah melakukan tahap persiapan model terlebih dahulu sebelum mengembangkan model menggunakan algoritma yang telah ditentukan.
 
-Tahap persiapan *dataframe* untuk analisis model menggunakan parameter `index`, yaitu train_mse dan test_mse, serta parameter `columns` yang merupakan algoritma yang akan digunakan untuk melakukan prediksi, yaitu algoritma K-Nearest Neighbor (KNN), Random Forest, dan Adaptive Boosting (AdaBoost).
-
-```python
-models = pd.DataFrame(
-    index   = ['train_mse', 'test_mse'],
-    columns = ['KNN', 'RandomForest', 'DecisioTree']
-)
-```
+Tahap persiapan *dataframe* untuk analisis model menggunakan parameter `index`, yaitu train_mse dan test_mse, serta parameter `columns` yang merupakan algoritma yang akan digunakan untuk melakukan prediksi, yaitu algoritma K-Nearest Neighbor (KNN), Random Forest, dan Decesion Tree.
 
 Kemudian terapkan ketiga algoritma ke dalam model tersebut.
 
 1. **K-Nearest Neighbor (KNN) Algorithm**  
-   Pada algoritma K-Nearest Neighbor digunakan parameter `n_neighbors` dengan nilai k = 10 tetangga dan `metric` bawaan, yaitu Euclidean.
-   
-   ```python
-   knn = KNeighborsRegressor(n_neighbors=10)
-   ```
+   Pada algoritma K-Nearest Neighbor digunakan parameter `n_neighbors` dengan nilai k = 10 tetangga dan `metric` bawaan, yaitu Euclidean. Kita menggunakan fungsi yang sudah disediakan oleh Scikit Learning, sehingga pemanggilan algoritma bisa dilakukan dengan mudah.
    
    Kemudian akan dilakukan analisis prediksi *error* menggunakan *Mean Squared Error* (MSE) pada data latih (*training data*) dan data uji (*testing data*)
    
 2. **Random Forest Algorithm**  
    Pada algoritma K-Nearest Neighbor digunakan parameter `n_estimator` dengan jumlah 50 *trees* (pohon), `max_depth` dengan nilai kedalaman atau panjang pohon 16, `random_state` dengan nilai 55, dan `n_jobs` yang bernilai -1 (pekerjaan dilakukan secara paralel).
    
-   ```python
-   rf = RandomForestRegressor(n_estimators=50, max_depth=16, random_state=55, n_jobs=-1)
-   ```
-   
    Kemudian akan dilakukan analisis prediksi *error* menggunakan *Mean Squared Error* (MSE) pada data latih (*training data*) dan data uji (*testing data*)
    
 3. **Decision Tree Algorithm**  
    Pada algoritma Decision Tree digunakan parameter `criterion` dengan `entropy`, dan `max_depth` dengan nilai 9.
    
-   ```python
-     dt = DecisionTreeClassifier(criterion='entropy', max_depth=9)
-   ```
-   
    Kemudian akan dilakukan analisis prediksi *error* menggunakan *Mean Squared Error* (MSE) pada data latih (*training data*) dan data uji (*testing data*)
 
-Ketiga model yang telah dibangun di atas, akan dilakukan pengujian kinerja untuk masing-masing model yang menggunakan algoritma K-Nearest Neighbor, algoritma Random Forest, dan algoritma Adaptive Boosting. Dari ketiga model tersebut akan diperoleh satu (1) model dengan hasil prediksi yang paling baik dan tingkat *error* yang paling rendah.
+Ketiga model yang telah dibangun di atas, akan dilakukan pengujian kinerja untuk masing-masing model yang menggunakan algoritma K-Nearest Neighbor, algoritma Random Forest, dan algoritma Decision Tree. Dari ketiga model tersebut akan diperoleh satu (1) model dengan hasil prediksi yang paling baik dan tingkat *error* yang paling rendah.
 
 ## Evaluation
 
 Pada tahap evaluasi model, akan dilakukan pengujian untuk melihat algoritma mana yang memberikan hasil prediksi paling baik dan dengan tingkat *error* yang paling rendah. Sebelumnya, akan dilakukan proses standarisasi atau *scaling* pada fitur numerik data uji (*testing data*) agar nilai rata-rata (*mean*) bernilai 0, dan varians bernilai 1.
 
-```python
-X_test.loc[:, numericalFeatures] = scaler.transform(X_test[numericalFeatures])
-```
 
 Kemudian evaluasi dari ketiga model, yaitu algoritma K-Nearest Neighbor, Random Forest, dan Adaptive Boosting (AdaBoost) untuk masing-masing data latih (*training data*) dan data uji (*testing data*) dengan melihat tingkat *error*-nya menggunakan *Mean Squared Error* (MSE),
 
@@ -299,15 +255,10 @@ $$MSE=\frac{1}{N}\sum_{i=1}^{N} (y_i-y\\_pred_i)^2$$
 
 di mana, nilai $N$ adalah jumlah *dataset*, nilai $y_i$ merupakan nilai sebenarnya, dan $y\\_pred$ yaitu nilai prediksinya.
 
-Penggunaan metode metrik *Mean Squared Error* (MSE) memiliki kelebihan, yaitu cukup sederhana dan mudah dipahami dalam melakukan perhitungan. Meskipun begitu, terdapat kelemahan pada metrik ini, yaitu hasil akurasi prediksi yang kecil karena tidak dapat membandingan hasil peramalan tersebut dengan kenyataannya. []
+Penggunaan metode metrik *Mean Squared Error* (MSE) memiliki kelebihan, yaitu cukup sederhana dan mudah dipahami dalam melakukan perhitungan. Meskipun begitu, terdapat kelemahan pada metrik ini, yaitu hasil akurasi prediksi yang kecil karena tidak dapat membandingan hasil peramalan tersebut dengan kenyataannya. 
 
-```python
-mse = pd.DataFrame(columns=['train', 'test'], index=['KNN', 'RF', 'Boosting'])
-modelDict = {'KNN': knn, 'RF': rf, 'Boosting': boosting}
-for name, model in modelDict.items():
-    mse.loc[name, 'train'] = mean_squared_error(y_true=yTrain, y_pred=model.predict(xTrain))/1e3
-    mse.loc[name, 'test']  = mean_squared_error(y_true=yTest,  y_pred=model.predict(xTest))/1e3
-```
+
+Untuk mempermudahnya, ditampilkan dalam bentuk tabel seperti yang ada di bawah ini.
 
 |           | DecisionTree | KNN      | Random Forest |
 |-----------|--------------|----------|---------------|
@@ -317,7 +268,9 @@ for name, model in modelDict.items():
 | F1-score  | 0.831994     | 0.767409 | 0.830522      |
 | mse       | 0.032199     | 0.041491 | 0.032415      |
 
+
 Dan untuk hasil mse dari data train dan test adalah sebagai berikut:
+
 |              | train    | test     |
 |--------------|----------|----------|
 | KNN          | 0.000036 | 0.000041 |
